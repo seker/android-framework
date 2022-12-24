@@ -1,0 +1,3 @@
+rootProject.name = 'framework-android-root'
+include ':framework-android'
+include ':framework-android-app'
