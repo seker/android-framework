@@ -29,6 +29,7 @@ object Framework {
     private val init = AtomicBoolean(false)
 
     fun init(context: Context) {
+        val start = System.currentTimeMillis()
         if (init.get()) {
             Log.w(java.lang.RuntimeException("Framework re-init."))
             return
@@ -60,7 +61,7 @@ object Framework {
             }
             frameworkTaskQueue.start()
             init.set(true)
-            Log.d("Framework.init() end.")
+            Log.d("Framework.init() end. Cost ${System.currentTimeMillis() - start} ms.")
         }
     }
 

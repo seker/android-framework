@@ -9,6 +9,18 @@ import seker.framework.android.desc.MicroValveDesc
  */
 abstract class MicroValve : Runnable {
 
+    @JvmField
+    protected val TAG: String
+
+    init {
+        val index = javaClass.simpleName.indexOf("Valve")
+        TAG = if (-1 == index)
+            javaClass.simpleName
+        else
+            javaClass.simpleName.substring(0, index)
+    }
+
+
     protected lateinit var context: Context
 
     companion object Factory {

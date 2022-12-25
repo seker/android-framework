@@ -9,6 +9,17 @@ import seker.framework.android.desc.MicroServiceDesc
  */
 abstract class MicroService {
 
+    @JvmField
+    protected val TAG: String
+
+    init {
+        val index = javaClass.simpleName.indexOf("Service")
+        TAG = if (-1 == index)
+            javaClass.simpleName
+        else
+            javaClass.simpleName.substring(0, index)
+    }
+
     protected lateinit var context: Context
 
     protected lateinit var microServiceManager: MicroServiceManager
