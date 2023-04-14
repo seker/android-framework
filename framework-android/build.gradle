@@ -8,11 +8,12 @@ archivesBaseName = "framework-android"
 version = '1.0.2-SNAPSHOT'
 
 android {
-    compileSdk 33
+    compileSdkVersion versions.compileSdkVersion
+    buildToolsVersion versions.buildToolsVersion
 
     defaultConfig {
-        minSdk 21
-        targetSdk 33
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
 
         testInstrumentationRunner 'androidx.test.runner.AndroidJUnitRunner'
         consumerProguardFiles "consumer-rules.pro"
@@ -37,13 +38,13 @@ android {
 }
 
 dependencies {
-    implementation 'io.github.seker:asynctask-android:1.0.1'
+    implementation "io.github.seker:asynctask-android:${versions.seker_asynctask_android}"
 
-    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation "androidx.appcompat:appcompat:${versions.androidx_appcompat}"
 
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    testImplementation "junit:junit:${versions.junit}"
+    androidTestImplementation "androidx.test.ext:junit:${versions.androidx_junit}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.androidx_espresso_core}"
 }
 
 apply from: 'publish.gradle'

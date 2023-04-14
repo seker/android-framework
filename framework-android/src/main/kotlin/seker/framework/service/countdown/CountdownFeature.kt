@@ -74,7 +74,7 @@ class CountdownFeature internal constructor(
             return
         }
         val count = currentCount--
-        AsyncTaskExecutor.getInstance().execute({ callback.onCountdown(totalCount, count) }, "cd_cb_$totalCount")
+        AsyncTaskExecutor.getInstance().execute { callback.onCountdown(totalCount, count) }
         if (0 > currentCount) {
             service.unregister(callback)
         } else {

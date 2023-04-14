@@ -49,7 +49,7 @@ class FpsFeature internal constructor(private val name: String, private val call
         }
         val fps = (count * INT_1000 / passedTime).toInt()
         val finalIndex = ++index
-        AsyncTaskExecutor.getInstance().execute({ callback.onFps(name, finalIndex, fps) }, "fps_cb_$name")
+        AsyncTaskExecutor.getInstance().execute { callback.onFps(name, finalIndex, fps) }
         lastTime = now
         count = 0
     }

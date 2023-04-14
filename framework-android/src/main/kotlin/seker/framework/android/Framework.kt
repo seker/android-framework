@@ -56,7 +56,7 @@ object Framework {
                 if (null == valve) {
                     Log.w("Failed to instance MicroValve : $description")
                 } else {
-                    frameworkTaskQueue.addTask(valve, valve.javaClass.simpleName, description.priority)
+                    frameworkTaskQueue.addTask(valve, description.priority)
                 }
             }
             frameworkTaskQueue.start()

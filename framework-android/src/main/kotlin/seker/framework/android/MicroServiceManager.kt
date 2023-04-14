@@ -38,9 +38,9 @@ object MicroServiceManager {
                             Log.w("Failed to instance MicroService : $description")
                         } else {
                             if (description.isAsyncInit) {
-                                AsyncTaskExecutor.getInstance().execute({
+                                AsyncTaskExecutor.getInstance().execute {
                                     microService.create()
-                                }, microService.javaClass.simpleName)
+                                }
                             } else {
                                 microService.create()
                             }

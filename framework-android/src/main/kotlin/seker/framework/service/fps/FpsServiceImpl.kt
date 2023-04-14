@@ -22,7 +22,7 @@ class FpsServiceImpl : FpsService() {
             val task = FpsFeature(name, callback)
             task.reset()
             task.future = AsyncTaskExecutor.getInstance()
-                .scheduleAtFixedRate(task, "fps_$name", 1, 1, TimeUnit.SECONDS)
+                .scheduleAtFixedRate(task, 1, 1, TimeUnit.SECONDS)
             tasks.append(key, task)
             task
         }

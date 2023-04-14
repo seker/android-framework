@@ -24,7 +24,7 @@ class CountdownServiceImpl : CountdownService() {
             Log.d(TAG, "register() : total = $total, callback=$callback")
             val task = CountdownFeature(total, unit!!.toMillis(period), callback, this)
             task.future = AsyncTaskExecutor.getInstance()
-                .scheduleAtFixedRate(task, "count_" + total + "_" + period, period, period, unit)
+                .scheduleAtFixedRate(task, period, period, unit)
             tasks.append(key, task)
             task
         }

@@ -5,14 +5,17 @@ plugins {
 
 android {
     namespace 'seker.framework.android.app'
-    compileSdk 33
+    compileSdkVersion versions.compileSdkVersion
+    buildToolsVersion versions.buildToolsVersion
 
     defaultConfig {
-        applicationId "seker.framework.android.app"
-        minSdk 21
-        targetSdk 33
+        minSdkVersion versions.minSdkVersion
+        targetSdkVersion versions.targetSdkVersion
+
         versionCode 1
         versionName "1.0.0"
+
+        applicationId "seker.framework.android.app"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -38,16 +41,15 @@ android {
 dependencies {
     implementation project(":framework-android")
 
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation "com.google.android.material:material:${versions.google_material}"
 
-    implementation 'com.google.android.material:material:1.8.0-beta01'
+    implementation "androidx.core:core-ktx:${versions.androidx_core}"
+    implementation "androidx.appcompat:appcompat:${versions.androidx_appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.androidx_constraintlayout}"
+    implementation "androidx.navigation:navigation-fragment-ktx:${versions.androidx_navigation}"
+    implementation "androidx.navigation:navigation-ui-ktx:${versions.androidx_navigation}"
 
-    implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
-    implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
-    implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
-
-    testImplementation 'junit:junit:4.13.2'
-    androidTestImplementation 'androidx.test.ext:junit:1.1.4'
-    androidTestImplementation 'androidx.test.espresso:espresso-core:3.5.0'
+    testImplementation "junit:junit:${versions.junit}"
+    androidTestImplementation "androidx.test.ext:junit:${versions.androidx_junit}"
+    androidTestImplementation "androidx.test.espresso:espresso-core:${versions.androidx_espresso_core}"
 }
