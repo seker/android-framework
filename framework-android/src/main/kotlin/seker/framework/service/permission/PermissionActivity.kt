@@ -3,9 +3,12 @@ package seker.framework.service.permission
 import android.app.Activity
 import android.os.Bundle
 import android.content.Intent
+import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
+import android.content.res.Configuration
 import android.os.Build
 import seker.framework.android.MicroServiceManager
+import seker.framework.android.R
 import android.os.Looper
 import android.graphics.Color
 import android.net.Uri
@@ -23,8 +26,23 @@ class PermissionActivity : Activity() {
     private lateinit var permissions: Array<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
+
+        intent.getBooleanExtra(KEY_WINDOW_FULLSCREEN, false).also { fullScreen ->
+            Log.d(TAG, "fullScreen=$fullScreen")
+            val theme = if (fullScreen) R.style.TransparentFullscreenTheme else R.style.TransparentTheme
+            setTheme(theme)
+        }
+
         super.onCreate(savedInstanceState)
-        val intent = intent
+        intent.getIntExtra(KEY_ORIENTATION, Configuration.ORIENTATION_PORTRAIT).also { orientation ->
+            requestedOrientation = when(orientation) {
+                Configuration.ORIENTATION_UNDEFINED -> ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+                Configuration.ORIENTATION_PORTRAIT -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+                Configuration.ORIENTATION_LANDSCAPE -> ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE
+                else -> ActivityInfo.SCREEN_ORIENTATION_PORTRAIT
+            }
+        }
+
         permissionType = intent.getIntExtra(KEY_PERMISSION_TYPE, PERMISSION_TYPE_PERMISSIONS)
         if (PERMISSION_TYPE_PERMISSIONS == permissionType) {
             permissions = intent.getStringArrayExtra(KEY_PERMISSIONS)!!
@@ -85,6 +103,11 @@ class PermissionActivity : Activity() {
         finish()
     }
 
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(0, 0)
+    }
+
     companion object {
         private const val TAG = "Permission"
 
@@ -93,5 +116,11 @@ class PermissionActivity : Activity() {
 
         const val KEY_PERMISSION_TYPE = "permission_type"
         const val KEY_PERMISSIONS = "permissions"
+
+        const val KEY_ORIENTATION = "orientation"
+
+        const val KEY_WINDOW_FULLSCREEN = "windowFullscreen"
+//        const val KEY_WINDOW_NO_TITLE = "windowNoTitle"
+//        const val KEY_WINDOW_ACTION_BAR = "windowActionBar"
     }
 }

@@ -1,17 +1,29 @@
 package seker.framework.android.app
 
+import android.Manifest
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
+import android.widget.Toast
+import androidx.fragment.app.Fragment
+import seker.framework.android.MicroServiceManager
 import seker.framework.android.app.databinding.FragmentFirstBinding
+import seker.framework.service.permission.PermissionService
+import seker.framework.service.permission.PermissionsCallback
 
 /**
  * A simple [Fragment] subclass as the default destination in the navigation.
  */
 class FirstFragment : Fragment() {
+
+    companion object {
+        val PERMISSIONS = arrayOf(
+            Manifest.permission.INTERNET,
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        )
+    }
 
     private var _binding: FragmentFirstBinding? = null
 
@@ -33,7 +45,17 @@ class FirstFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.buttonFirst.setOnClickListener {
-            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+//            findNavController().navigate(R.id.action_FirstFragment_to_SecondFragment)
+            val permissionService = MicroServiceManager.getService<PermissionService>(PermissionService::class.java.name)
+            permissionService!!.requestPermissions(PERMISSIONS, object : PermissionsCallback {
+                override fun onRequestPermissionsResult(permissions: Array<String>, grantResults: IntArray) {
+                    if (PermissionService.Companion.granted(grantResults)) {
+                        Toast.makeText(requireContext(), "获取权限成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(requireContext(), "获取权限失败", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }, requireActivity())
         }
     }
 

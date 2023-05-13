@@ -1,18 +1,20 @@
 package seker.framework.service.permission
 
-import android.content.Intent
-import android.os.Build
-import android.content.pm.PackageManager
+import android.R
+import android.app.Activity
 import android.app.AppOpsManager
 import android.content.Context
-import android.view.WindowManager
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.PixelFormat
 import android.os.Binder
+import android.os.Build
 import android.provider.Settings
-import seker.framework.logger.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.core.content.ContextCompat
-import java.util.ArrayList
+import seker.framework.logger.Log
+
 
 /**
  * @author xinwen
@@ -41,7 +43,7 @@ class PermissionServiceImpl : PermissionService() {
         return grantResults
     }
 
-    override fun requestPermissions(permissions: Array<String>, callback: PermissionsCallback): Boolean {
+    override fun requestPermissions(permissions: Array<String>, callback: PermissionsCallback, activity: Activity?): Boolean {
         synchronized(this) {
             return if (null == permissionsCallback) {
                 permissionsCallback = callback
@@ -49,7 +51,22 @@ class PermissionServiceImpl : PermissionService() {
                 intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK
                 intent.putExtra(PermissionActivity.KEY_PERMISSION_TYPE, PermissionActivity.PERMISSION_TYPE_PERMISSIONS)
                 intent.putExtra(PermissionActivity.KEY_PERMISSIONS, permissions)
-                context.startActivity(intent)
+                activity?.apply {
+                    intent.putExtra(PermissionActivity.KEY_ORIENTATION, resources.configuration.orientation)
+
+                    val attrs = intArrayOf(R.attr.windowFullscreen/*, R.attr.windowNoTitle, R.attr.windowActionBar*/)
+                    val typedArray = theme.obtainStyledAttributes(attrs)
+                    val windowFullscreen = typedArray.getBoolean(0, false)
+//                    val windowNoTitle = typedArray.getBoolean(1, true)
+//                    val windowActionBar = typedArray.getBoolean(2, true)
+                    typedArray.recycle() // 使用完后回收typedArray资源
+
+                    intent.putExtra(PermissionActivity.KEY_WINDOW_FULLSCREEN, windowFullscreen)
+//                    intent.putExtra(PermissionActivity.KEY_WINDOW_NO_TITLE, windowNoTitle)
+//                    intent.putExtra(PermissionActivity.KEY_WINDOW_ACTION_BAR, windowActionBar)
+                }
+                (activity?:context).startActivity(intent)
+                activity?.overridePendingTransition(0, 0)
                 true
             } else {
                 Log.w(TAG, "permissionsCallback=$permissionsCallback, not null: return false")
@@ -124,7 +141,7 @@ class PermissionServiceImpl : PermissionService() {
         }
     }
 
-    override fun requestOverlayPermission(callback: PermissionCallback) {
+    override fun requestOverlayPermission(callback: PermissionCallback, activity: Activity?) {
         synchronized(overlayCallbacks) {
             overlayCallbacks.add(callback)
             if (overlayCallbacks.size == 1) {
@@ -134,7 +151,22 @@ class PermissionServiceImpl : PermissionService() {
                     PermissionActivity.KEY_PERMISSION_TYPE,
                     PermissionActivity.PERMISSION_TYPE_OVERLAY
                 )
-                context.startActivity(intent)
+                activity?.apply {
+                    intent.putExtra(PermissionActivity.KEY_ORIENTATION, resources.configuration.orientation)
+
+                    val attrs = intArrayOf(R.attr.windowFullscreen/*, R.attr.windowNoTitle, R.attr.windowActionBar*/)
+                    val typedArray = theme.obtainStyledAttributes(attrs)
+                    val windowFullscreen = typedArray.getBoolean(0, false)
+//                    val windowNoTitle = typedArray.getBoolean(1, true)
+//                    val windowActionBar = typedArray.getBoolean(2, true)
+                    typedArray.recycle() // 使用完后回收typedArray资源
+
+                    intent.putExtra(PermissionActivity.KEY_WINDOW_FULLSCREEN, windowFullscreen)
+//                    intent.putExtra(PermissionActivity.KEY_WINDOW_NO_TITLE, windowNoTitle)
+//                    intent.putExtra(PermissionActivity.KEY_WINDOW_ACTION_BAR, windowActionBar)
+                }
+                (activity?:context).startActivity(intent)
+                activity?.overridePendingTransition(0, 0)
             } else {
                 Log.i(TAG, "overlay permission is requesting...")
             }

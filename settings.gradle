@@ -38,4 +38,5 @@ dependencyResolutionManagement {
 
 rootProject.name = 'framework-android-root'
 include ':framework-android'
-include ':framework-android-app'
+include ':app'
+project(":app").projectDir = file("framework-android-app")
